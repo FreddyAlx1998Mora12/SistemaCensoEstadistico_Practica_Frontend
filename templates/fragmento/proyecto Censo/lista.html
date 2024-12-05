@@ -1,0 +1,246 @@
+{% extends 'template.html' %} {% block content %}
+
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+<script src="{{ url_for('static', filename='js/jquery.js') }}"></script>
+<!-- Quill.js CSS -->
+<link href="https://cdn.quilljs.com/1.3.7/quill.snow.css" rel="stylesheet" />
+
+<!-- Quill.js JavaScript -->
+<script src="https://cdn.quilljs.com/1.3.7/quill.min.js"></script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<!-- Metodos de busqueda -->
+<script>
+  $(document).ready(function () {
+    function url_change() {
+      var url = "/search/";
+      var tipo = $("#tipo_busqueda").val();
+      var texto = $("#texto").val();
+      var selec_gener = $("#selectGenerador").val();
+      var criterio_busqueda = $("#criterio_busqueda").val();
+      
+      // Si el texto no está vacío, usa el valor del texto para la búsqueda
+      if(texto !== ""){
+        url += tipo + "/" + criterio_busqueda + "/" + texto;
+      } else if(selec_gener) {
+        // Si el campo de generador está activo, utiliza el valor del select
+        url += tipo + "/" + criterio_busqueda + "/" + selec_gener;
+      } else {
+        // Si no hay texto y el select de generador no está seleccionado, usa criterios por defecto
+        url += tipo + "/" + criterio_busqueda + "/" + texto;
+      }
+        
+      $("#btn_search").attr("href", url);
+    }
+    
+    $("#texto").keyup(function () {
+      url_change();
+    });
+    
+    $("#criterio_busqueda").change(function () {
+      url_change();
+    });
+    
+    // Limpiar los criterios de búsqueda
+    $("#btn_clear").click(function () {
+      // Limpiar todos los campos de búsqueda
+      $("#tipo_busqueda").val("lineal");
+      $("#criterio_busqueda").val("direccion");
+      $("#texto").val("");
+      $("#selectGenerador").val("").hide();
+      
+      // Redirigir a la ruta que lista todos los censos
+      window.location.href = "/proyectoCenso/list";  // Redirigir a la lista de censos sin filtros
+    });
+  });
+</script>
+
+<!-- Metodos de Ordenacion -->
+<script>
+  $(document).ready(function () {
+    function actualizarUrlOrden() {
+      const criterio = $("#criterio").val();
+      const metodo = $("#metodo").val();
+      const orden = $("#orden").val(); // Asegúrate de que #orden existe
+
+      if (criterio && metodo && orden) {
+        const url = `/order/${metodo}/${orden}/${criterio}`;
+        $("#ordenar").attr("href", url);
+      }
+    }
+
+    $("#criterio, #metodo, #orden").change(function () {
+      actualizarUrlOrden();
+    });
+
+    actualizarUrlOrden();
+  });
+</script>
+
+<!-- Cambia dinamicamente el input -->
+<script>
+  $(document).ready(function () {
+    function cambiarInput() {
+      var criterio_busqueda = $("#criterio_busqueda").val(); // Obtener valor del criterio seleccionado
+      var textoInput = $("#texto");
+      var selectGenerador = $("#selectGenerador");
+
+      // Si se selecciona 'haveGenerador', mostrar el select con Sí/No y ocultar el input de texto
+      if (criterio_busqueda === "haveGenerador") {
+        textoInput.hide(); // Ocultar el input
+        selectGenerador.show(); // Mostrar el select
+      } else {
+        textoInput.show(); // Mostrar el input
+        selectGenerador.hide(); // Ocultar el select
+      }
+    }
+
+    // Llamar a la función cuando el valor del criterio cambie
+    $("#criterio_busqueda").change(function () {
+      cambiarInput();
+    });
+
+    // Asegurar que la visibilidad sea correcta al cargar la página
+    cambiarInput();
+  });
+</script>
+
+<section class="section">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-12">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title text-center">Listado de Censos</h5>
+
+            <div class="col-lg-10">
+              <label>Tipo de Busqueda: </label>
+              <select id="tipo_busqueda">
+                <option value="lineal">Lineal</option>
+                <option value="binario">Binario</option>
+              </select>
+              <label>Buscar por: </label>
+              <select id="criterio_busqueda">
+                <option value="direccion">Direccion</option>
+                <option value="descripcion">Descripcion</option>
+                <option value="numero_integrante">Numero Integrantes</option>
+                <option value="haveGenerador">Tienen Generador?</option>
+              </select>
+              <!-- Campo texto por defecto -->
+              <input id="texto" placeholder="Ingrese lo que desea buscar" />
+
+              <!-- Campo select para 'haveGenerador' -->
+              <select id="selectGenerador" style="display: none">
+                <option value="true">Sí</option>
+                <option value="false">No</option>
+              </select>
+
+              <a id="btn_search" class="btn btn-success">Buscar</a>
+              <!-- Botón para limpiar los criterios de búsqueda -->
+              <a id="btn_clear" class="btn btn-danger">Limpiar Búsqueda</a>
+            </div>
+            <br />
+            <div class="col-lg-10">
+              <div class="input-group">
+                <label>Metodo de Ordenacion: </label>
+                <select id="metodo" class="form-select">
+                  <option value="shell">Shell Sort</option>
+                  <option value="merge">Merge Sort</option>
+                  <option value="quick">Quick Sort</option>
+                </select>
+
+                <label>Ordenar por: </label>
+                <select id="criterio">
+                  <option value="direccion">Direccion</option>
+                  <option value="descripcion">Descripcion</option>
+                  <option value="numero_integrante">Numero Integrantes</option>
+                  <option value="haveGenerador">Tienen Generador?</option>
+                </select>
+
+                <select id="orden" class="form-select">
+                  <option value="1">A-Z</option>
+                  <option value="0">Z-A</option>
+                </select>
+
+                <a id="ordenar" href="#" class="btn btn-success">Ordenar</a>
+              </div>
+            </div>
+
+            <div class="d-flex justify-content-end mb-3">
+              <a
+                href="/proyectoCenso/registro"
+                class="btn btn-custom btn-success"
+                >Nuevo Censo</a
+              >
+            </div>
+
+            <!-- Table with stripped rows -->
+            <div class="table-responsive">
+              <table class="table table-striped datatable text-center">
+                <thead class="thead-dark">
+                  <tr>
+                    <th>Nro</th>
+                    <th>Descripción</th>
+                    <th>Nro. Personas</th>
+                    <th>Dirección</th>
+                    <th>Generador? S/N</th>
+                    <th>Acciones</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% if list %} {% for item in list %}
+                  <tr id="row-{{ item.idCenso }}">
+                    <td>{{ item.idCenso }}</td>
+                    <td>{{ item.descripcion }}</td>
+                    <td>{{ item.nroIntegrantesFamilia }}</td>
+                    <td>{{ item.direccion }}</td>
+                    <td>
+                      {% if item.haveGenerador %} Si {% else %} No {% endif %}
+                    </td>
+                    <td>
+                      <a
+                        href="/proyectoCenso/update/{{ item.idCenso }}"
+                        class="btn btn-custom btn-warning"
+                        >Modificar</a
+                      >
+                      <form
+                        action="/proyectoCenso/delete/{{ loop.index }}"
+                        method="post"
+                        style="display: inline"
+                      >
+                        <input type="hidden" name="_method" value="DELETE" />
+                        <!-- Campo oculto para indicar el método -->
+                        <button type="submit" class="btn btn-custom btn-danger">
+                          Eliminar
+                        </button>
+                      </form>
+                      {% if item.haveGenerador %}
+                      <a
+                        href="/proyectoCenso/info/{{ item.idCenso }}"
+                        class="btn btn-custom btn-light btn-sm ml-2"
+                      >
+                        Ver<br /><span>Informacion</span></a
+                      >
+                      {% endif %}
+                    </td>
+                  </tr>
+                  {% endfor %} {% else %}
+                  <tr>
+                    <td colspan="6" class="text-center">
+                      No hay listado de censos registrados. Registre un nuevo
+                      Censo.
+                    </td>
+                  </tr>
+                  {% endif %}
+                </tbody>
+              </table>
+            </div>
+            <!-- End Table with stripped rows -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock %}

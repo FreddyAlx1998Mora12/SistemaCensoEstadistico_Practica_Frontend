@@ -1,0 +1,113 @@
+<section class="section">
+  <div class="row">
+    <div class="col-lg-20">
+      <div class="card">
+        <div class="card-body justify-content-between">
+          <h5 class="card-title">Modificacion Generador</h5>
+
+          <!-- Floating Labels Form -->
+          <form
+            class="row g-3"
+            novalidate
+            onsubmit="return validateForm()"
+            id="generadorSection"
+          >
+          <input type="hidden" value="{{data.idGenerador }}" name="idGenerador" />
+            <div class="col-md-12 mb-3">
+              <div class="form-floating">
+                <input
+                  type="number"
+                  class="form-control"
+                  id="consumo_litrosHora"
+                  name="consumo_litrosHora"
+                  placeholder="Cantidad de Integrantes"
+                  value="{{data.consumo_litrosHora}}"
+                  required
+                />
+                <label for="consumo_litrosHora"
+                  >Ingrese la capacidad de consumo (litros/Hora) del
+                  generador.</label
+                >
+                <div
+                  class="invalid-feedback"
+                  id="consumo_litrosHoraFeedback"
+                  style="display: none"
+                >
+                  La capacidad de consumo debe ser números rango de (0 - 100)
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4 mb-3">
+              <div class="form-floating">
+                <input
+                  type="number"
+                  class="form-control"
+                  id="kw"
+                  name="kw"
+                  placeholder="Descripción"
+                  value="{{data.kw}}"
+                  required
+                />
+                <label for="kw">Ingrese la capacidad de KW </label>
+                <div
+                  class="invalid-feedback"
+                  id="kwFeedback"
+                  style="display: none"
+                >
+                  La capacidad de KW producido no debe de ser maximo de 50kW,
+                  solo se permite el ingreso de numeros
+                </div>
+              </div>
+            </div>
+            <div class="col-md-5 mb-3">
+              <div class="form-floating">
+                <input
+                  type="number"
+                  class="form-control"
+                  id="costo"
+                  name="costo"
+                  placeholder="Dirección"
+                  value="{{data.costo}}"
+                  required
+                />
+                <label for="costo">Ingrese el costo del generador</label>
+                <div
+                  class="invalid-feedback"
+                  id="costoFeedback"
+                  style="display: none"
+                >
+                  El costo no puede estar vacía. Debe ingresar solo numeros
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 mb-3">
+              <div class="form-floating">
+                <input
+                  type="text"
+                  class="form-control"
+                  id="tipo"
+                  name="tipo"
+                  placeholder="Dirección"
+                  required
+                  value="{{data.tipo}}"
+                />
+                <label for="tipo"
+                  >Ingrese el tipo de Combustion del Generador</label
+                >
+                <div
+                  class="invalid-feedback"
+                  id="tipoFeedback"
+                  style="display: none"
+                >
+                  El tipo de generador no puede estar vacía.
+                </div>
+              </div>
+            </div>
+
+            
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

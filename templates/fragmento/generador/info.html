@@ -1,0 +1,39 @@
+{% extends 'template.html' %}
+{% block content %}
+<main id="main" class="main">
+    <div class="pagetitle">
+      <h1>Informacion</h1>
+      <nav>
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="/">Inicio</a></li>
+          <li class="breadcrumb-item">
+            <a href="/proyectoCenso/list">Listado</a>
+          </li>
+          <li class="breadcrumb-item active">Informacion</li>
+        </ol>
+      </nav>
+    </div>
+    <!-- End Page Title -->
+  
+    <section class="section">
+      <div class="row">
+        <div class="col-lg-20">
+          <!-- Default Card -->
+          <div class="card">
+            <div class="card-body">
+              <h4 class="card-title">Informacion del Generador</h4>
+              <h5 class="card-subtitle mt-2"><b>Datos Capacidad Total Consumo de Energia/Combustion litros por hora :</b> {{data.consumo_litrosHora}}</h5> 
+              <h5 class="card-subtitle mt-2"><b>Datos Capacidad Total Generacion de Energia (Kw) :</b> {{data.kw}} <span>kW</span></h5> 
+              <h5 class="card-subtitle mt-2"><b>Costo de equipo Generador de Energia :</b> <span>$</span> {{data.costo}} </h5> 
+              <h5 class="card-subtitle mt-2"><b>Tipo de Energia/Combustion del Generador :</b> {{data.tipo}}</h5> 
+            </div>
+            <div class="card-footer text-center">
+                
+                <p class="card-text"><a href="/proyectoCenso/list" class="btn btn-primary w-50">Regresar</a></p>
+              </div>
+          </div><!-- End Default Card -->
+        </div>
+      </div>
+    </section>
+  </main>
+  {% endblock %}

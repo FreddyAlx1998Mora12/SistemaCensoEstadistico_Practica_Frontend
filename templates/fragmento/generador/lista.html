@@ -1,0 +1,67 @@
+{% extends 'template.html' %}
+{% block content %}
+
+<section class="section">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-12">
+
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title text-center">LISTADO DE GENERADORES</h5>
+
+            <!-- Table with stripped rows -->
+            <div class="table-responsive">
+              <table class="table table-striped datatable text-center">
+                <thead>
+                  <tr>
+                    <th>Nro</th>
+                    <th>Capacidad de Consumo (Litros/Hora)</th>
+                    <th>Capacidad de Kw</th>
+                    <th>Costo Generador</th>
+                    <th>Tipo Generador</th>
+                    <!-- <th>Acciones</th> -->
+                  </tr>
+                </thead>
+                <tbody>
+                  {% if list %}
+                    {% for item in list %}
+                    <tr id="row-{{ item.idProyecto }}">
+                      <td>{{ loop.index }}</td>
+                      <td>{{ item.consumo_litrosHora }}</td>
+                      <td>{{ item.kw }}</td>
+                      <td>{{ item.costo }}</td>
+                      <td>{{ item.tipo }}</td> 
+                      <!-- <td>
+                        <a href="/admin/proyecto/edit/{{ item.idProyecto }}" class="btn btn-custom btn-warning">Modificar</a>
+                        <button class="btn btn-custom btn-danger">Eliminar</button>
+                      </td> -->
+                    </tr>
+                    {% endfor %}
+                  {% else %}
+                    <tr>
+                      <td colspan="12" class="text-center">No hay clientes registrados.</td> <!-- Ajuste para la cantidad de columnas -->
+                    </tr>
+                  {% endif %}
+                </tbody>
+              </table>
+            </div>
+            <!-- End Table with stripped rows -->
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- <script>
+  function deleteRow(id) {
+    const row = document.getElementById(`row-${id}`);
+    if (confirm("¿Estás seguro de que deseas eliminar este cliente?")) {
+      row.remove(); // Elimina la fila de la tabla
+    }
+  }
+</script> -->
+{% endblock %}

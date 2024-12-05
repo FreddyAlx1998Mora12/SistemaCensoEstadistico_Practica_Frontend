@@ -1,0 +1,246 @@
+{% extends 'template.html' %} {% block content %}
+<main id="main" class="main">
+  <div class="pagetitle">
+    <h1>Formulario de Registro Censo</h1>
+    <nav>
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/">Inicio</a></li>
+        <li class="breadcrumb-item">
+          <a href="/proyectoCenso/list">Listado</a>
+        </li>
+        <li class="breadcrumb-item active">Registro</li>
+      </ol>
+    </nav>
+  </div>
+  <!-- End Page Title -->
+
+  <section class="section">
+    <div class="row">
+      <div class="col-lg-20">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Registro Censo</h5>
+
+            <!-- Floating Labels Form -->
+            <form
+              class="row g-3"
+              method="post"
+              action="/proyectoCenso/nuevo"
+              novalidate
+              onsubmit="return validateForm()"
+            >
+              <div class="col-md-12">
+                <div class="form-floating">
+                  <input
+                    type="number"
+                    class="form-control"
+                    id="nroIntegrantesFamilia"
+                    name="nroIntegrantesFamilia"
+                    placeholder="Cantidad de Integrantes"
+                    required
+                  />
+                  <label for="nroIntegrantesFamilia"
+                    >Ingrese cuantos integrantes (personas) conforman vivienda,
+                    local, etc.</label
+                  >
+                  <div
+                    class="invalid-feedback"
+                    id="nroIntegrantesFamiliaFeedback"
+                    style="display: none"
+                  >
+                    El número de integrantes debe ser mayor que cero, y solo
+                    debe ingresar números (0 - 99)
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-floating">
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="descripcion"
+                    name="descripcion"
+                    placeholder="Descripción"
+                    required
+                  />
+                  <label for="descripcion"
+                    >Descripción del Local, Vivienda, Familia, etc.</label
+                  >
+                  <div
+                    class="invalid-feedback"
+                    id="descripcionFeedback"
+                    style="display: none"
+                  >
+                    La descripción no puede estar vacía.
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-floating">
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="direccion"
+                    name="direccion"
+                    placeholder="Dirección"
+                    required
+                  />
+                  <label for="direccion">Dirección o Ubicación de Censo</label>
+                  <div
+                    class="invalid-feedback"
+                    id="direccionFeedback"
+                    style="display: none"
+                  >
+                    La dirección no puede estar vacía.
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-check form-switch form-check-reverse">
+                  <label class="form-check-label" for="haveGenerador"
+                    >¿Tiene Generador?</label
+                  >
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    id="haveGenerador"
+                    name="haveGenerador"
+                    value="1"
+                    onchange="toggleGeneradorSection()"
+                  />
+                </div>
+              </div>
+
+              <div id="generadorContainer" style="display: none"></div>
+
+              <!-- <div id="generadorSection" style="display: none;">
+                <h5>Información del Generador</h5>
+                <div class="col-md-6">
+                    <div class="form-floating">
+                        <input type="text" class="form-control" id="tipoGenerador" name="tipoGenerador" placeholder="Tipo de Generador" required>
+                        <label for="tipoGenerador">Tipo de Generador</label>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-floating">
+                        <input type="number" class="form-control" id="kw" name="kw" placeholder="Kilovatios" required>
+                        <label for="kw">Kilovatios (KW)</label>
+                    </div>
+                </div>
+                
+              </div> -->
+
+              <div class="text-center">
+                <button type="submit" class="btn btn-success">Registrar</button>
+                <button type="reset" class="btn btn-secondary">
+                  Limpiar Registro
+                </button>
+              </div>
+            </form>
+            <!-- End floating Labels Form -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+<!-- End #main -->
+
+<script>
+  function validateForm() {
+    // Limpiar mensajes de error
+    document.getElementById("nroIntegrantesFamiliaFeedback").style.display =
+      "none";
+    document.getElementById("descripcionFeedback").style.display = "none";
+    document.getElementById("direccionFeedback").style.display = "none";
+
+    const numIntegrantes = parseInt(
+      document.getElementById("nroIntegrantesFamilia").value
+    );
+    const descripcion = document.getElementById("descripcion").value;
+    const direccion = document.getElementById("direccion").value;
+    const haveGenerador = document.getElementById("haveGenerador").checked;
+
+    const consumoLitrosHora =
+      document.getElementById("consumo_litrosHora").value;
+    const kw = document.getElementById("kw").value;
+    const costo = document.getElementById("costo").value;
+    const tipo = document.getElementById("tipo").value;
+
+    // Limpia mensajes de error anteriores
+    document.getElementById("consumo_litrosHoraFeedback").style.display =
+      "none";
+    document.getElementById("kwFeedback").style.display = "none";
+    document.getElementById("costoFeedback").style.display = "none";
+    document.getElementById("tipoFeedback").style.display = "none";
+
+    let isValid = true;
+
+    // Validar que el número de integrantes sea un número positivo
+    if (isNaN(numIntegrantes) || numIntegrantes <= 0 || numIntegrantes >= 100) {
+      document.getElementById("nroIntegrantesFamiliaFeedback").style.display =
+        "block";
+      isValid = false;
+    }
+    // Validar que la descripción no esté vacía
+    if (!descripcion.trim() || descripcion.length <= 5) {
+      document.getElementById("descripcionFeedback").style.display = "block";
+      isValid = false;
+    }
+    // Validar que la dirección no esté vacía
+    if (!direccion.trim() || direccion.length <= 5) {
+      document.getElementById("direccionFeedback").style.display = "block";
+      isValid = false;
+    }
+
+    if (haveGenerador) {
+      if (consumoLitrosHora <= 0 || isNaN(consumoLitrosHora) || consumoLitrosHora > 100) {
+        document.getElementById("consumo_litrosHoraFeedback").style.display =
+          "block";
+          isValid = false;
+      }
+
+      // Validación de kw
+      if (kw <= 0 || isNaN(kw) || kw > 50) {
+        document.getElementById("kwFeedback").style.display = "block";
+        isValid = false;
+      }
+
+      // Validación de costo
+      if (costo <= 0 || isNaN(costo)) {
+        document.getElementById("costoFeedback").style.display = "block";
+        isValid = false;
+      }
+
+      // Validación de tipo
+      if (tipo.trim() === "") {
+        document.getElementById("tipoFeedback").style.display = "block";
+        isValid = false;
+      }
+    }
+
+    return isValid; // Si todas las validaciones pasan, enviar el formulario
+  }
+
+  function toggleGeneradorSection() {
+    const generadorContainer = document.getElementById("generadorContainer");
+    const haveGenerador = document.getElementById("haveGenerador").checked;
+
+    if (haveGenerador) {
+      // Cargar el contenido del archivo generador.html
+      fetch("/proyectoCenso/generador/form")
+        .then((response) => response.text())
+        .then((data) => {
+          generadorContainer.innerHTML = data; // Inserta el HTML cargado
+          generadorContainer.style.display = "block"; // Muestra la sección
+        })
+        .catch((error) =>
+          console.error("Error cargando el formulario:", error)
+        );
+    } else {
+      generadorContainer.innerHTML = ""; // Limpia el contenido
+      generadorContainer.style.display = "none"; // Oculta la sección
+    }
+  }
+</script>
+{% endblock %}
