@@ -194,7 +194,7 @@ def view_order_censo(atributo, tipo, metodo):
 
 
 # Metodo de Busqueda
-@router.route('/search/<tipo>/<criterio>/<texto>', methods=['GET'])
+@router.route('/proyectoCenso/list/search/<tipo>/<criterio>/<texto>', methods=['GET'])
 def view_search_censo(tipo, criterio, texto):
     url = f"http://localhost:8080/proyectoCenso/search/{tipo}/{criterio}/{texto}" 
     r = requests.get(url)

@@ -13,7 +13,7 @@
 <script>
   $(document).ready(function () {
     function url_change() {
-      var url = "/search/";
+      var url = "/proyectoCenso/list/search/";
       var tipo = $("#tipo_busqueda").val();
       var texto = $("#texto").val();
       var selec_gener = $("#selectGenerador").val();
@@ -22,7 +22,7 @@
       // Si el texto no está vacío, usa el valor del texto para la búsqueda
       if(texto !== ""){
         url += tipo + "/" + criterio_busqueda + "/" + texto;
-      } else if(selec_gener) {
+      } else if(criterio_busqueda === "haveGenerador") {
         // Si el campo de generador está activo, utiliza el valor del select
         url += tipo + "/" + criterio_busqueda + "/" + selec_gener;
       } else {
@@ -38,6 +38,10 @@
     });
     
     $("#criterio_busqueda").change(function () {
+      url_change();
+    });
+
+    $("#selectGenerador").change(function () {
       url_change();
     });
     
@@ -108,136 +112,163 @@
 <section class="section">
   <div class="container">
     <div class="row justify-content-center">
-      <div class="col-lg-12">
-        <div class="card">
+      <div class="col" style="margin-top: 90px;">
+        <div class="card p-2">
           <div class="card-body">
-            <h5 class="card-title text-center">Listado de Censos</h5>
+            <div class="row">
+              <h1 class="card-title text-center">Busqueda y Ordenacion</h1>
+            </div>
+            <div class="row">
+              <div class="col-sm-3 d-flex align-items-center">
+                <label for="tipo_busqueda" class="mr-3">Tipo de Búsqueda:</label>
+                <select class="form-select w-45" id="tipo_busqueda">
+                  <option value="lineal">Lineal</option>
+                  <option value="binario">Binario</option>
+                </select>
+              </div>
+            
+              <div class="col-sm-3 d-flex align-items-center justify-content-center">
+                <label for="criterio_busqueda" class="mr-2">Buscar por:</label>
+                <select class="form-select w-45" id="criterio_busqueda">
+                  <option value="direccion">Direccion</option>
+                  <option value="descripcion">Descripcion</option>
+                  <option value="numero_integrante">Numero Integrantes</option>
+                  <option value="haveGenerador">Tienen Generador?</option>
+                </select>
+              </div>
+            
+              <div class="col-sm-4 d-flex align-items-center justify-content-center">
+                <label for="texto">Criterio de Búsqueda:</label>
+                <input id="texto" class="form-control" placeholder="Ingrese lo que desea buscar" />
+                <select id="selectGenerador" class="form-select w-25" style="display: none">
+                  <option value="true">Sí</option>
+                  <option value="false">No</option>
+                </select>
+              </div>
 
-            <div class="col-lg-10">
-              <label>Tipo de Busqueda: </label>
-              <select id="tipo_busqueda">
-                <option value="lineal">Lineal</option>
-                <option value="binario">Binario</option>
-              </select>
-              <label>Buscar por: </label>
-              <select id="criterio_busqueda">
-                <option value="direccion">Direccion</option>
-                <option value="descripcion">Descripcion</option>
-                <option value="numero_integrante">Numero Integrantes</option>
-                <option value="haveGenerador">Tienen Generador?</option>
-              </select>
-              <!-- Campo texto por defecto -->
-              <input id="texto" placeholder="Ingrese lo que desea buscar" />
-
-              <!-- Campo select para 'haveGenerador' -->
-              <select id="selectGenerador" style="display: none">
-                <option value="true">Sí</option>
-                <option value="false">No</option>
-              </select>
-
-              <a id="btn_search" class="btn btn-success">Buscar</a>
-              <!-- Botón para limpiar los criterios de búsqueda -->
-              <a id="btn_clear" class="btn btn-danger">Limpiar Búsqueda</a>
+            </div>
+            
+            <div class="row mb-2 d-flex justify-content-end">
+              <div class="col-sm-1">
+                <a id="btn_search" class="btn btn-success">Buscar</a>
+              </div>
+              <div class="col-sm-2">
+                <a id="btn_clear" class="btn btn-danger">Limpiar Búsqueda</a>
+              </div>
             </div>
             <br />
-            <div class="col-lg-10">
-              <div class="input-group">
-                <label>Metodo de Ordenacion: </label>
-                <select id="metodo" class="form-select">
-                  <option value="shell">Shell Sort</option>
-                  <option value="merge">Merge Sort</option>
-                  <option value="quick">Quick Sort</option>
-                </select>
 
-                <label>Ordenar por: </label>
-                <select id="criterio">
+            <div class="row mb-2">
+              <div class="col-sm-3 d-flex justify-content-center align-items-center">
+                <label class="mr-3">Metodo de Ordenacion: </label>
+                  <select id="metodo" class="form-select">
+                    <option value="shell">Shell Sort</option>
+                    <option value="merge">Merge Sort</option>
+                    <option value="quick">Quick Sort</option>
+                  </select>
+              </div>
+
+              <div class="col-sm-5 d-flex justify-content-center align-items-center">
+                  
+                <label >Ordenar por: </label>
+                <select class="form-select" id="criterio">
                   <option value="direccion">Direccion</option>
                   <option value="descripcion">Descripcion</option>
                   <option value="numero_integrante">Numero Integrantes</option>
                   <option value="haveGenerador">Tienen Generador?</option>
                 </select>
 
+                <label >Orden: </label>
                 <select id="orden" class="form-select">
-                  <option value="1">A-Z</option>
-                  <option value="0">Z-A</option>
+                  <option value="1">Ascendente</option>
+                  <option value="0">Descendete</option>
                 </select>
 
                 <a id="ordenar" href="#" class="btn btn-success">Ordenar</a>
               </div>
+
             </div>
 
-            <div class="d-flex justify-content-end mb-3">
-              <a
-                href="/proyectoCenso/registro"
-                class="btn btn-custom btn-success"
-                >Nuevo Censo</a
-              >
-            </div>
-
-            <!-- Table with stripped rows -->
-            <div class="table-responsive">
-              <table class="table table-striped datatable text-center">
-                <thead class="thead-dark">
-                  <tr>
-                    <th>Nro</th>
-                    <th>Descripción</th>
-                    <th>Nro. Personas</th>
-                    <th>Dirección</th>
-                    <th>Generador? S/N</th>
-                    <th>Acciones</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {% if list %} {% for item in list %}
-                  <tr id="row-{{ item.idCenso }}">
-                    <td>{{ item.idCenso }}</td>
-                    <td>{{ item.descripcion }}</td>
-                    <td>{{ item.nroIntegrantesFamilia }}</td>
-                    <td>{{ item.direccion }}</td>
-                    <td>
-                      {% if item.haveGenerador %} Si {% else %} No {% endif %}
-                    </td>
-                    <td>
-                      <a
-                        href="/proyectoCenso/update/{{ item.idCenso }}"
-                        class="btn btn-custom btn-warning"
-                        >Modificar</a
-                      >
-                      <form
-                        action="/proyectoCenso/delete/{{ loop.index }}"
-                        method="post"
-                        style="display: inline"
-                      >
-                        <input type="hidden" name="_method" value="DELETE" />
-                        <!-- Campo oculto para indicar el método -->
-                        <button type="submit" class="btn btn-custom btn-danger">
-                          Eliminar
-                        </button>
-                      </form>
-                      {% if item.haveGenerador %}
-                      <a
-                        href="/proyectoCenso/info/{{ item.idCenso }}"
-                        class="btn btn-custom btn-light btn-sm ml-2"
-                      >
-                        Ver<br /><span>Informacion</span></a
-                      >
-                      {% endif %}
-                    </td>
-                  </tr>
-                  {% endfor %} {% else %}
-                  <tr>
-                    <td colspan="6" class="text-center">
-                      No hay listado de censos registrados. Registre un nuevo
-                      Censo.
-                    </td>
-                  </tr>
-                  {% endif %}
-                </tbody>
-              </table>
-            </div>
-            <!-- End Table with stripped rows -->
+            
+            
           </div>
         </div>
+
+        <div class="card p-4">
+          <div class="row">
+            <h1 class="card-title text-center">Listado de Censos</h1>
+          </div>
+          <div class="d-flex justify-content-end m-2">
+            <a
+              href="/proyectoCenso/registro"
+              class="btn btn-custom btn-success"
+              >Nuevo Censo</a
+            >
+          </div>
+
+          <!-- Table with stripped rows -->
+          <div class="table-responsive">
+            <table class="table table-striped datatable text-center">
+              <thead class="thead-dark">
+                <tr>
+                  <th>Nro</th>
+                  <th>Descripción</th>
+                  <th>Nro. Personas</th>
+                  <th>Dirección</th>
+                  <th>Generador? S/N</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% if list %} {% for item in list %}
+                <tr id="row-{{ item.idCenso }}">
+                  <td>{{ item.idCenso }}</td>
+                  <td>{{ item.descripcion }}</td>
+                  <td>{{ item.nroIntegrantesFamilia }}</td>
+                  <td>{{ item.direccion }}</td>
+                  <td>
+                    {% if item.haveGenerador %} Si {% else %} No {% endif %}
+                  </td>
+                  <td>
+                    <a
+                      href="/proyectoCenso/update/{{ item.idCenso }}"
+                      class="btn btn-custom btn-warning"
+                      >Modificar</a
+                    >
+                    <form
+                      action="/proyectoCenso/delete/{{ loop.index }}"
+                      method="post"
+                      style="display: inline"
+                    >
+                      <input type="hidden" name="_method" value="DELETE" />
+                      <!-- Campo oculto para indicar el método -->
+                      <button type="submit" class="btn btn-custom btn-danger">
+                        Eliminar
+                      </button>
+                    </form>
+                    {% if item.haveGenerador %}
+                    <a
+                      href="/proyectoCenso/info/{{ item.idCenso }}"
+                      class="btn btn-custom btn-light btn-sm ml-2"
+                    >
+                      Ver<br /><span>Informacion</span></a
+                    >
+                    {% endif %}
+                  </td>
+                </tr>
+                {% endfor %} {% else %}
+                <tr>
+                  <td colspan="6" class="text-center">
+                    No hay listado de censos registrados. Registre un nuevo
+                    Censo.
+                  </td>
+                </tr>
+                {% endif %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
       </div>
     </div>
   </div>
